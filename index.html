@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>For This Beautiful Lady 💗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --rose:     #ff3f83;
+      --blush:    #ffc8dc;
+      --petal:    #ffe8f3;
+      --deep:     #6d1840;
+      --wine:     #9a2150;
+      --cream:    #fff9fb;
+      --glass:    rgba(255,255,255,.72);
+      --border:   rgba(255,255,255,.82);
+      --shadow:   rgba(136,28,72,.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--deep);
+      background:
+        radial-gradient(ellipse at 8% 5%,   rgba(255,255,255,.9),    transparent 22%),
+        radial-gradient(ellipse at 92% 10%,  rgba(255,160,200,.85),   transparent 30%),
+        radial-gradient(ellipse at 50% 50%,  rgba(255,220,235,.4),    transparent 28%),
+        radial-gradient(ellipse at 80% 90%,  rgba(255,100,155,.5),    transparent 28%),
+        radial-gradient(ellipse at 15% 80%,  rgba(255,200,225,.6),    transparent 24%),
+        linear-gradient(150deg, #ffe0ef 0%, #ffc0d8 40%, #ff85b5 75%, #ff5898 100%);
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay for texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .55;
+    }
+
+    body.locked {
+      height: 100vh;
+      height: 100svh;
+      overflow: hidden;
+      position: fixed;
+      inset: 0;
+    }
+
+    /* ── SCREENS ─────────────────────────────────────── */
+    .screen {
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding:
+        max(20px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+      position: fixed;
+      inset: 0;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      transition: opacity .52s cubic-bezier(.4,0,.2,1), transform .52s cubic-bezier(.4,0,.2,1);
+      z-index: 10;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(.95) translateY(12px);
+    }
+
+    .screen.gone { display: none; }
+
+    /* ── CARDS ─────────────────────────────────────── */
+    .pop-card,
+    .love-card {
+      background: var(--glass);
+      backdrop-filter: blur(28px) saturate(1.4);
+      -webkit-backdrop-filter: blur(28px) saturate(1.4);
+      border: 1.5px solid var(--border);
+      box-shadow:
+        0 32px 80px var(--shadow),
+        0 2px 0 rgba(255,255,255,.9) inset,
+        0 -1px 0 rgba(255,120,170,.12) inset;
+      width: min(93vw, 500px);
+      border-radius: 40px;
+      padding: clamp(30px, 7.5vw, 48px) clamp(22px, 6.5vw, 38px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: cardIn .55s cubic-bezier(.2,.9,.2,1.15);
+    }
+
+    /* Decorative orbs inside cards */
+    .pop-card::before,
+    .love-card::before {
+      content: "";
+      position: absolute;
+      width: 200px; height: 200px;
+      right: -90px; top: -90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,100,160,.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .pop-card::after,
+    .love-card::after {
+      content: "";
+      position: absolute;
+      width: 130px; height: 130px;
+      left: -60px; bottom: -60px;
+      border-radius: 38px;
+      transform: rotate(28deg);
+      background: rgba(255,255,255,.5);
+      pointer-events: none;
+    }
+
+    /* Shimmer line at top of card */
+    .card-shimmer {
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.9), transparent);
+    }
+
+    /* ── BADGE ─────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255,63,131,.13);
+      border: 1px solid rgba(255,63,131,.2);
+      color: var(--wine);
+      font-weight: 700;
+      font-size: 12.5px;
+      margin-bottom: 20px;
+      letter-spacing: .03em;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADINGS ─────────────────────────────────────── */
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 9.5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -.5px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      color: var(--deep);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .pop-card p,
+    .love-card p {
+      font-size: clamp(15.5px, 4.2vw, 19px);
+      line-height: 1.75;
+      color: var(--wine);
+      max-width: 420px;
+      margin: 0 auto 28px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    .big-emoji {
+      font-size: clamp(52px, 16vw, 88px);
+      line-height: 1;
+      margin-bottom: 16px;
+      animation: heartbeat 1.3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 8px 18px rgba(220,50,100,.25));
+    }
+
+    .quote {
+      margin: 4px auto 26px;
+      padding: 16px 18px;
+      border-radius: 24px;
+      background: rgba(255,88,150,.09);
+      border: 1px solid rgba(255,100,160,.2);
+      color: var(--wine);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14.5px, 3.8vw, 17px);
+      line-height: 1.65;
+      max-width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote::before {
+      content: "\201C";
+      font-size: 3em;
+      line-height: 0;
+      vertical-align: -.4em;
+      color: rgba(255,63,131,.3);
+      margin-right: 4px;
+    }
+
+    /* ── BUTTONS ─────────────────────────────────────── */
+    button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      border-radius: 999px;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+      position: relative;
+      z-index: 1;
+      letter-spacing: .02em;
+    }
+
+    .primary-btn {
+      font-size: 16.5px;
+      min-height: 54px;
+      min-width: 190px;
+      padding: 15px 28px;
+      background: linear-gradient(135deg, #ff2e78, #ff76ae);
+      color: #fff;
+      box-shadow:
+        0 16px 32px rgba(255,46,120,.38),
+        0 1px 0 rgba(255,255,255,.3) inset;
+    }
+
+    .primary-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 22px 38px rgba(255,46,120,.45); }
+    .primary-btn:active { transform: scale(.96) translateY(2px); }
+
+    /* ── LOVE SCREEN BUTTONS ─────────────────────────── */
+    .love-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      z-index: 4;
+      flex-wrap: nowrap;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, #ff2e78, #ff76ae);
+      color: #fff;
+      box-shadow: 0 16px 30px rgba(255,46,120,.38), 0 1px 0 rgba(255,255,255,.28) inset;
+      min-width: 140px;
+      min-height: 56px;
+      padding: 15px 26px;
+      font-size: 18px;
+    }
+
+    #yesBtn:hover { transform: translateY(-2px) scale(1.04); }
+    #yesBtn:active { transform: scale(.95); }
+
+    /* noBtn is always fixed — shown/hidden via display */
+    #noBtn {
+      background: rgba(255,255,255,.9);
+      color: var(--wine);
+      box-shadow: 0 12px 26px rgba(100,18,52,.17), 0 1px 0 rgba(255,255,255,.7) inset;
+      min-width: 140px;
+      min-height: 56px;
+      padding: 15px 26px;
+      font-size: 18px;
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,100,160,.2);
+      position: fixed;
+      z-index: 30;
+      transition: left .18s ease, top .18s ease;
+    }
+
+    /* ── GALLERY ─────────────────────────────────────── */
+    .gallery-app {
+      width: min(100%, 980px);
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(14px, env(safe-area-inset-right))
+        max(28px, env(safe-area-inset-bottom))
+        max(14px, env(safe-area-inset-left));
+      opacity: 0;
+      transform: translateY(24px);
+      pointer-events: none;
+      transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .gallery-app.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* ── GALLERY PANELS ──────────────────────────────── */
+    .gallery-panel {
+      width: 100%;
+      transition: opacity .5s ease, transform .5s ease;
+    }
+
+    .gallery-panel--welcome {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px 0 34px;
+    }
+
+    .gallery-panel--welcome .pop-card { animation: none; }
+
+    .gallery-panel--timeline {
+      padding-top: 32px;
+    }
+
+    .hidden-panel {
+      display: none;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .hidden-panel.reveal {
+      display: block;
+      animation: panelReveal .6s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+
+    @keyframes panelReveal {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-head {
+      padding: 20px 4px 30px;
+      text-align: center;
+    }
+
+    .section-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -.5px;
+      margin-bottom: 12px;
+    }
+
+    .section-head p {
+      font-size: clamp(14.5px, 3.8vw, 18px);
+      line-height: 1.68;
+      color: var(--wine);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ── TIMELINE ─────────────────────────────────────── */
+    .memory-wall {
+      position: relative;
+      padding: 28px 0 42px;
+      min-height: 950px;
+    }
+
+    .memory-wall::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 20px; bottom: 12px;
+      width: 3px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: linear-gradient(to bottom,
+        rgba(255,255,255,.2),
+        rgba(255,60,125,.45),
+        rgba(255,255,255,.22));
+      box-shadow: 0 0 0 8px rgba(255,255,255,.14);
+    }
+
+    .memory-item {
+      position: relative;
+      width: 50%;
+      min-height: 280px;
+      padding: 14px 34px 26px;
+    }
+
+    .memory-item.left  { margin-right: auto; text-align: right; }
+    .memory-item.right { margin-left: auto;  text-align: left;  }
+
+    .memory-item::before {
+      content: "";
+      position: absolute;
+      top: 108px;
+      width: 44px; height: 3px;
+      background: rgba(255,255,255,.7);
+      box-shadow: 0 4px 14px rgba(140,27,72,.12);
+    }
+
+    .memory-item.left::before  { right: -2px; }
+    .memory-item.right::before { left:  -2px; }
+
+    .pin {
+      position: absolute;
+      top: 98px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff82b0, var(--rose));
+      border: 4px solid rgba(255,255,255,.92);
+      box-shadow: 0 8px 20px rgba(120,20,57,.3);
+      z-index: 4;
+    }
+
+    .memory-item.left .pin  { right: -10px; }
+    .memory-item.right .pin { left:  -10px; }
+
+    /* ── POLAROID ─────────────────────────────────────── */
+    .polaroid {
+      display: inline-block;
+      width: min(100%, 280px);
+      background: #fffcfd;
+      padding: 12px 12px 20px;
+      border-radius: 8px;
+      box-shadow:
+        0 22px 48px rgba(100,18,55,.24),
+        0 4px 12px rgba(100,18,55,.1),
+        inset 0 0 0 1px rgba(140,40,80,.04);
+      cursor: pointer;
+      position: relative;
+      transition: transform .24s ease, box-shadow .24s ease;
+    }
+
+    .memory-item:nth-child(1) .polaroid { transform: rotate(-4deg); }
+    .memory-item:nth-child(2) .polaroid { transform: rotate(3.2deg); }
+    .memory-item:nth-child(3) .polaroid { transform: rotate(4.5deg); }
+    .memory-item:nth-child(4) .polaroid { transform: rotate(-3deg); }
+    .memory-item:nth-child(5) .polaroid { transform: rotate(-5deg); }
+    .memory-item:nth-child(6) .polaroid { transform: rotate(3.8deg); }
+
+    .polaroid:hover {
+      transform: rotate(0deg) scale(1.03) translateY(-4px) !important;
+      box-shadow: 0 32px 60px rgba(100,18,55,.3);
+    }
+
+    .polaroid:active { transform: scale(.97) rotate(0deg) !important; }
+
+    .tape {
+      position: absolute;
+      top: -14px; left: 50%;
+      width: 78px; height: 28px;
+      transform: translateX(-50%) rotate(-3.5deg);
+      background: rgba(255,218,232,.78);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 4px 12px rgba(99,22,55,.07);
+      z-index: 2;
+      border-radius: 3px;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 1 / .92;
+      overflow: hidden;
+      border-radius: 4px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,.75), transparent 28%),
+        linear-gradient(135deg, #ffd5e8, #ff8ab6);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: rgba(111,28,67,.8);
+      font-weight: 700;
+      line-height: 1.38;
+      padding: 14px;
+      font-size: 13px;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .polaroid-caption {
+      padding: 12px 4px 0;
+      text-align: center;
+    }
+
+    .polaroid-caption h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16.5px;
+      line-height: 1.2;
+      margin-bottom: 5px;
+      color: var(--deep);
+    }
+
+    .polaroid-caption span {
+      display: inline-flex;
+      color: var(--wine);
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 7px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .polaroid-caption p {
+      color: #7a2d52;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ── MEMORY NOTE ─────────────────────────────────── */
+    .memory-note {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid var(--border);
+      box-shadow: 0 24px 60px var(--shadow);
+      border-radius: 36px;
+      padding: 30px 22px;
+      text-align: center;
+      margin: 10px 0 36px;
+    }
+
+    .memory-note h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 7vw, 40px);
+      line-height: 1.1;
+      margin-bottom: 14px;
+      letter-spacing: -.4px;
+    }
+
+    .memory-note p {
+      font-size: clamp(15px, 4vw, 18px);
+      line-height: 1.78;
+      color: var(--wine);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .memory-note p + p {
+      margin-top: 14px;
+    }
+
+    /* ── FLOATING EMOJIS ─────────────────────────────── */
+    .float-emoji {
+      --dx: 0px;
+      --spin: 360deg;
+      position: fixed;
+      top: 0;
+      pointer-events: none;
+      z-index: 1;
+      animation: floatUp linear infinite;
+      will-change: transform, opacity;
+      user-select: none;
+      -webkit-user-select: none;
+      line-height: 1;
+    }
+
+    /* ── SPARKLES ─────────────────────────────────────── */
+    .sparkle {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 0 6px 2px rgba(255,180,220,.7);
+      pointer-events: none;
+      z-index: 1;
+      animation: twinkle 2.6s ease-in-out infinite;
+    }
+
+    /* ── MODAL ─────────────────────────────────────────── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(20px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
+      background: rgba(80,12,42,.42);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .26s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--glass);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--border);
+      box-shadow: 0 36px 90px rgba(100,15,55,.32), 0 2px 0 rgba(255,255,255,.88) inset;
+      width: min(94vw, 520px);
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 38px;
+      padding: 12px;
+      transform: scale(.94) translateY(12px);
+      transition: transform .28s cubic-bezier(.2,.9,.2,1.1);
+    }
+
+    .modal.show .modal-card { transform: scale(1) translateY(0); }
+
+    .modal-photo {
+      width: 100%;
+      aspect-ratio: 1 / .92;
+      border-radius: 30px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffd5e3, #ff8db9);
+      display: grid;
+      place-items: center;
+      color: #7a2149;
+      text-align: center;
+      font-weight: 700;
+      padding: 18px;
+    }
+
+    .modal-photo img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      display: block;
+    }
+
+    .modal-text {
+      padding: 18px 10px 10px;
+      text-align: center;
+    }
+
+    .modal-date {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 7px 14px;
+      background: rgba(255,83,145,.13);
+      border: 1px solid rgba(255,83,145,.2);
+      color: var(--wine);
+      font-weight: 700;
+      font-size: 11.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .modal-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 7vw, 36px);
+      line-height: 1.05;
+      margin-bottom: 10px;
+      letter-spacing: -.4px;
+    }
+
+    .modal-text p {
+      color: var(--wine);
+      font-size: 15.5px;
+      line-height: 1.72;
+      margin-bottom: 16px;
+    }
+
+    .small-btn {
+      min-height: 46px;
+      padding: 12px 22px;
+      background: rgba(255,255,255,.82);
+      color: var(--wine);
+      box-shadow: 0 8px 20px rgba(108,20,55,.1);
+      font-size: 14px;
+      border: 1.5px solid rgba(255,120,160,.2);
+    }
+
+    .small-btn:hover { transform: translateY(-1px); }
+
+    /* ── KEYFRAMES ─────────────────────────────────────── */
+    @keyframes cardIn {
+      from { opacity: 0; transform: scale(.88) translateY(20px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      20%       { transform: scale(1.14); }
+      40%       { transform: scale(.97); }
+      60%       { transform: scale(1.1); }
+      80%       { transform: scale(.99); }
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translate3d(var(--dx,0px), 110dvh, 0) rotate(0deg);   opacity: 0; }
+      10%  { opacity: .85; }
+      90%  { opacity: .65; }
+      100% { transform: translate3d(var(--dx,20px), -15dvh, 0) rotate(var(--spin, 360deg)); opacity: 0; }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { transform: scale(.5);  opacity: .2; }
+      50%       { transform: scale(1.3); opacity: .9; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .memory-wall { min-height: auto; padding: 18px 0 30px; }
+      .memory-wall::before { left: 24px; transform: none; }
+
+      .memory-item,
+      .memory-item.left,
+      .memory-item.right {
+        width: 100%;
+        margin: 0;
+        padding: 12px 0 30px 60px;
+        text-align: left;
+        min-height: unset;
+      }
+
+      .memory-item::before,
+      .memory-item.left::before,
+      .memory-item.right::before { left: 24px; width: 34px; top: 100px; }
+
+      .memory-item .pin,
+      .memory-item.left .pin,
+      .memory-item.right .pin { left: 15px; right: auto; top: 91px; }
+
+      .polaroid { width: min(100%, 330px); }
+
+      .memory-item:nth-child(1) .polaroid { transform: rotate(-2.5deg); }
+      .memory-item:nth-child(2) .polaroid { transform: rotate(2deg); }
+      .memory-item:nth-child(3) .polaroid { transform: rotate(-1.5deg); }
+      .memory-item:nth-child(4) .polaroid { transform: rotate(2.3deg); }
+      .memory-item:nth-child(5) .polaroid { transform: rotate(-2deg); }
+      .memory-item:nth-child(6) .polaroid { transform: rotate(1.7deg); }
+    }
+
+    @media (max-width: 390px) {
+      .pop-card, .love-card { border-radius: 32px; }
+      .primary-btn { min-width: 170px; font-size: 15.5px; }
+      #yesBtn, #noBtn { min-width: 120px; font-size: 16px; padding-left: 18px; padding-right: 18px; }
+      .badge { font-size: 11.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body class="locked">
+
+  <!-- SCREEN 0 -->
+  <main id="screen0" class="screen">
+    <section class="pop-card">
+      <div class="card-shimmer"></div>
+      <div class="badge">💗 A small introduction 💗</div>
+      <h1>Before anything <em>else...</em></h1>
+      <p>I want to introduce someone beautiful — someone who deserves a little page made just for her.</p>
+      <button class="primary-btn" type="button" onclick="nextIntro()">Start ✨</button>
+    </section>
+  </main>
+
+  <!-- SCREEN 1 -->
+  <main id="screen1" class="screen hidden">
+    <section class="pop-card">
+      <div class="card-shimmer"></div>
+      <div class="big-emoji">🌷</div>
+      <h1>She has this <em>charm</em></h1>
+      <p>The kind that makes ordinary moments feel softer, warmer, and a little more special.</p>
+      <button class="primary-btn" type="button" onclick="nextIntro()">Tell me more</button>
+    </section>
+  </main>
+
+  <!-- SCREEN 2 -->
+  <main id="screen2" class="screen hidden">
+    <section class="pop-card">
+      <div class="card-shimmer"></div>
+      <div class="big-emoji">☺️</div>
+      <h1>Her <em>smile?</em></h1>
+      <p>It is the type of smile that can make someone randomly think, "wow, she really is beautiful."</p>
+      <button class="primary-btn" type="button" onclick="nextIntro()">Continue 💕</button>
+    </section>
+  </main>
+
+  <!-- SCREEN 3 -->
+  <main id="screen3" class="screen hidden">
+    <section class="pop-card">
+      <div class="card-shimmer"></div>
+      <div class="big-emoji">💫</div>
+      <h1>Not just <em>beauty</em></h1>
+      <p>It is also the way she makes things feel calm, the way her presence becomes someone's favorite comfort.</p>
+      <div class="quote">Some people are pretty. Some people are special. Somehow, she is both.</div>
+      <button class="primary-btn" type="button" onclick="nextIntro()">Who is she?</button>
+    </section>
+  </main>
+
+  <!-- SCREEN 4 -->
+  <main id="screen4" class="screen hidden">
+    <section class="pop-card">
+      <div class="card-shimmer"></div>
+      <div class="big-emoji">💖</div>
+      <h1>It is <em>you.</em></h1>
+      <p>This beautiful lady I am talking about is you. You are appreciated, admired, and special in a way words cannot fully explain.</p>
+      <button class="primary-btn" type="button" onclick="showLoveQuestion()">One more thing 💌</button>
+    </section>
+  </main>
+
+  <!-- LOVE SCREEN -->
+  <main id="loveScreen" class="screen hidden">
+    <section class="love-card">
+      <div class="card-shimmer"></div>
+      <div class="badge">💗 Important question 💗</div>
+      <h1>Do you still <em>love me?</em></h1>
+      <p>Choose carefully, because one button gets very nervous when you try to press it.</p>
+      <div class="love-buttons">
+        <button id="yesBtn" type="button">Yes 😘</button>
+        <!-- spacer that matches noBtn size so layout doesn't shift when noBtn goes fixed -->
+        <div id="noBtnSpacer" style="min-width:140px;min-height:56px;visibility:hidden;pointer-events:none;"></div>
+      </div>
+    </section>
+  </main>
+  <!-- noBtn lives OUTSIDE the love-card so overflow:hidden never clips it -->
+  <button id="noBtn" type="button" style="display:none;">No 😭</button>
+
+  <!-- GALLERY -->
+  <div id="galleryApp" class="gallery-app">
+
+    <!-- WELCOME PANEL -->
+    <div id="galleryWelcome" class="gallery-panel gallery-panel--welcome">
+      <section class="pop-card">
+        <div class="card-shimmer"></div>
+        <div class="badge">📸 Our little archive</div>
+        <h1>Memories <em>with you</em></h1>
+        <p>Since you said yes, here are some little moments that became special because they were ours.</p>
+        <button class="primary-btn" type="button" onclick="showTimeline()">View polaroids 💕</button>
+      </section>
+    </div>
+
+    <!-- TIMELINE PANEL -->
+    <div id="galleryTimeline" class="gallery-panel gallery-panel--timeline hidden-panel">
+      <section id="timeline">
+      <div class="section-head">
+        <div class="badge">💗 Connected moments</div>
+        <h2>Our polaroid <em style="font-family:'Playfair Display',serif;font-style:italic">timeline</em></h2>
+        <p>A small gallery of us, connected like a timeline — because every picture is part of our story.</p>
+      </div>
+
+      <div class="memory-wall" id="memoryWall"></div>
+      </section>
+
+      <section class="memory-note">
+        <h2>To you, <em style="font-family:'Playfair Display',serif;font-style:italic;color:var(--rose)">my palangga</em> 💗</h2>
+        <p>I made this for you because I wanted you to feel what I feel every single day — that you are someone worth celebrating, not just on special occasions, but just for existing the way you do.</p>
+        <p>Every photo in this timeline is not just a memory. Each one is a reminder of a moment I got to have with you — and how lucky I feel that those moments were mine. You make the simplest days feel like something I never want to forget.</p>
+        <p>And this gift? It is not finished. Because as long as I am with you, there will always be more days to add, more pictures to keep, and more reasons to love you. This is just the beginning. I love you always in all ways. 🌷</p>
+      </section>
+    </div><!-- end gallery-timeline -->
+
+  </div><!-- end galleryApp -->
+
+  <!-- MODAL -->
+  <div class="modal" id="memoryModal" onclick="closeMemory(event)">
+    <div class="modal-card">
+      <div class="modal-photo" id="modalPhoto"></div>
+      <div class="modal-text">
+        <span class="modal-date" id="modalDate"></span>
+        <h3 id="modalTitle"></h3>
+        <p id="modalDesc"></p>
+        <button class="small-btn" type="button" onclick="forceCloseMemory()">Close ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ─── CONFIG ─────────────────────────────────────── */
+    const introTotal = 5;
+    let currentIntro = 0;
+    let escapeCount = 0;
+
+    const noMessages = [
+      "Why? 🥺", "Still no? 😭", "Please? 🥹",
+      "Pangga please 😭", "I will cry 😢",
+      "Last chance 🥺", "Press yes na 💗"
+    ];
+
+    const noBtn  = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const loveScreen = document.getElementById("loveScreen");
+
+    /* ─── INTRO NAVIGATION ───────────────────────────── */
+    function showIntro(index) {
+      for (let i = 0; i < introTotal; i++) {
+        const s = document.getElementById("screen" + i);
+        s.classList.toggle("hidden", i !== index);
+      }
+    }
+
+    function nextIntro() {
+      if (currentIntro < introTotal - 1) {
+        currentIntro++;
+        showIntro(currentIntro);
+      }
+    }
+
+    /* ─── LOVE SCREEN ────────────────────────────────── */
+    function showLoveQuestion() {
+      for (let i = 0; i < introTotal; i++) {
+        const s = document.getElementById("screen" + i);
+        s.classList.add("hidden");
+        setTimeout(() => s.classList.add("gone"), 540);
+      }
+      setTimeout(() => {
+        loveScreen.classList.remove("hidden");
+        // Position noBtn over the spacer so it looks side-by-side with yesBtn
+        setTimeout(() => {
+          const spacer = document.getElementById("noBtnSpacer");
+          if (spacer) {
+            const r = spacer.getBoundingClientRect();
+            noBtn.style.left = r.left + "px";
+            noBtn.style.top  = r.top  + "px";
+            noBtn.style.transition = "none"; // no slide-in on first show
+            noBtn.style.display = "block";
+            // re-enable transition after placement
+            requestAnimationFrame(() => {
+              noBtn.style.transition = "";
+            });
+          }
+        }, 60);
+      }, 130);
+    }
+
+    /* ─── NO BUTTON: make it run ─────────────────────── */
+    function vw() { return window.visualViewport ? window.visualViewport.width  : window.innerWidth; }
+    function vh() { return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
+
+    function makeNoBtnRun(touchX, touchY) {
+      const pad = 16;
+      const btnW = noBtn.offsetWidth  || 140;
+      const btnH = noBtn.offsetHeight || 56;
+      const maxX = vw() - btnW - pad;
+      const maxY = vh() - btnH - pad - 28;
+
+      // Pick best escape position (farthest from touch point)
+      let bestX = pad, bestY = pad, bestDist = -1;
+      for (let i = 0; i < 26; i++) {
+        const cx = Math.random() * (maxX - pad) + pad;
+        const cy = Math.random() * (maxY - pad) + pad;
+        const dist = Math.hypot(cx + btnW/2 - touchX, cy + btnH/2 - touchY);
+        if (dist > bestDist) { bestDist = dist; bestX = cx; bestY = cy; }
+      }
+
+      noBtn.textContent = noMessages[Math.min(escapeCount, noMessages.length - 1)];
+      escapeCount++;
+      noBtn.style.left = Math.max(pad, Math.min(bestX, maxX)) + "px";
+      noBtn.style.top  = Math.max(pad, Math.min(bestY, maxY)) + "px";
+    }
+
+    noBtn.addEventListener("pointerdown", e => { e.preventDefault(); makeNoBtnRun(e.clientX, e.clientY); });
+    noBtn.addEventListener("touchstart",  e => { e.preventDefault(); const t = e.touches[0]; makeNoBtnRun(t.clientX, t.clientY); }, { passive: false });
+    noBtn.addEventListener("mouseenter",  () => makeNoBtnRun(vw()/2, vh()/2));
+
+    /* ─── YES BUTTON ─────────────────────────────────── */
+    yesBtn.addEventListener("click", () => {
+      loveScreen.classList.add("hidden");
+      noBtn.style.display = "none";
+      setTimeout(() => {
+        loveScreen.classList.add("gone");
+        document.body.classList.remove("locked");
+        document.getElementById("galleryApp").classList.add("show");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        launchHearts();
+      }, 540);
+    });
+
+    /* ─── SHOW TIMELINE ──────────────────────────────── */
+    function showTimeline() {
+      const welcome  = document.getElementById("galleryWelcome");
+      const timeline = document.getElementById("galleryTimeline");
+
+      // Fade out welcome panel
+      welcome.style.transition = "opacity .4s ease, transform .4s ease";
+      welcome.style.opacity    = "0";
+      welcome.style.transform  = "translateY(-14px)";
+
+      setTimeout(() => {
+        welcome.style.display = "none";
+        timeline.classList.remove("hidden-panel");
+        timeline.classList.add("reveal");
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }, 420);
+    }
+
+    /* ─── MEMORIES DATA ──────────────────────────────── */
+    const memories = [
+      { image: "src/march 19, 2024.jpg", placeholder: "march 19, 2024.jpg", date: "March 19, 2024", title: "Safe With You", desc: "Being beside you here made this little moment feel so warm and safe, pangga." },
+      { image: "src/march 27, 2024.jpg", placeholder: "march 27, 2024.jpg", date: "March 27, 2024", title: "Lazy With You", desc: "Even a quiet day feels special when I get to spend it with you." },
+      { image: "src/march 31, 2024.jpg", placeholder: "march 31, 2024.jpg", date: "March 31, 2024", title: "Golden Girl", desc: "You looked so pretty in the light, and this memory feels soft because of you." },
+      { image: "src/april 5, 2024.jpg", placeholder: "april 5, 2024.jpg", date: "April 5, 2024", title: "My Pretty Girl", desc: "Your cute face here is exactly why this photo makes me smile, pangga." },
+      { image: "src/april 10, 2024.jpg", placeholder: "april 10, 2024.jpg", date: "April 10, 2024", title: "A Little Moment", desc: "Even simple little memories feel sweeter when they remind me of you." },
+      { image: "src/april 16, 2024.jpg", placeholder: "april 16, 2024.jpg", date: "April 16, 2024", title: "Beside You", desc: "Sitting beside you always makes an ordinary moment feel better." },
+      { image: "src/april 20,2024.jpg", placeholder: "april 20,2024.jpg", date: "April 20, 2024", title: "Bracelet Details", desc: "These little bracelets are sweet because they remind me of us.", position: "center bottom" },
+      { image: "src/april 27, 2024.jpg", placeholder: "april 27, 2024.jpg", date: "April 27, 2024", title: "Balloon Girl", desc: "You looked so lovely here, and your soft smile made the moment feel special." },
+      { image: "src/may 2, 2024.jpg", placeholder: "may 2, 2024.jpg", date: "May 2, 2024", title: "By The Water", desc: "Even from behind, this memory feels peaceful because it has you in it." },
+      { image: "src/may 14, 2024.jpg", placeholder: "may 14, 2024.jpg", date: "May 14, 2024", title: "Just Us", desc: "This picture feels simple, but being with you made it special." },
+      { image: "src/may 22, 2024.jpg", placeholder: "may 22, 2024.jpg", date: "May 22, 2024", title: "Sunlit Beauty", desc: "You looked so beautiful under the trees, and this photo deserves to stay." },
+      { image: "src/may 28, 2024.jpg", placeholder: "may 28, 2024.jpg", date: "May 28, 2024", title: "Cute Face", desc: "Your playful little expression here makes this memory impossible not to love." },
+      { image: "src/may 29, 2024.jpg", placeholder: "may 29, 2024.jpg", date: "May 29, 2024", title: "Beautiful As Always", desc: "You looked effortlessly pretty here, and I still love this photo of you." },
+      { image: "src/may 30, 2024.jpg", placeholder: "may 30, 2024.jpg", date: "May 30, 2024", title: "Dressed With You", desc: "You looked so beautiful beside me, and this memory feels extra sweet, pangga." },
+      { image: "src/may 30, 2024..jpg", placeholder: "may 30, 2024..jpg", date: "May 30, 2024", title: "Mirror With You", desc: "Any mirror picture feels better when you are standing there with me." },
+      { image: "src/june 4, 2024.jpg", placeholder: "june 4, 2024.jpg", date: "June 4, 2024", title: "Close To You", desc: "This close little moment with you feels warm in the sweetest way." },
+      { image: "src/june 7, 2024.jpg", placeholder: "june 7, 2024.jpg", date: "June 7, 2024", title: "Late Night Pretty", desc: "You looked so cute here, even in the simplest late-night moment." },
+      { image: "src/june 8, 2024.jpg", placeholder: "june 8, 2024.jpg", date: "June 8, 2024", title: "Playful You", desc: "Your shy little gesture here is adorable, and I love this side of you." },
+      { image: "src/june 9, 2024.jpg", placeholder: "june 9, 2024.jpg", date: "June 9, 2024", title: "Sweetest Smile", desc: "Your smile here is enough to make this one of my favorite little memories." },
+      { image: "src/june 10, 2024.jpg", placeholder: "june 10, 2024.jpg", date: "June 10, 2024", title: "With My Girl", desc: "I love little candid moments where you are right there beside me." },
+      { image: "src/june 14, 2024.jpg", placeholder: "june 14, 2024.jpg", date: "June 14, 2024", title: "Quiet Beside You", desc: "Even a sleepy moment feels worth keeping when you are part of it." },
+      { image: "src/june 15, 2024.jpg", placeholder: "june 15, 2024.jpg", date: "June 15, 2024", title: "Flowers For You", desc: "You looked beautiful with those flowers, and you deserved every bit of sweetness, pangga." },
+      { image: "src/june 19, 2024.jpg", placeholder: "june 19, 2024.jpg", date: "June 19, 2024", title: "A Simple Memory", desc: "This small memory still feels special because it belongs to us." },
+      { image: "src/june 21, 2024.jpg", placeholder: "june 21, 2024.jpg", date: "June 21, 2024", title: "Cute And Cool", desc: "Your cute face here made this simple photo feel so easy to love." },
+      { image: "src/june 23, 2024.jpg", placeholder: "june 23, 2024.jpg", date: "June 23, 2024", title: "Quick Selfie", desc: "You looked adorable beside me, and this quick photo became a sweet memory." },
+      { image: "src/june 27, 2024.jpg", placeholder: "june 27, 2024.jpg", date: "June 27, 2024", title: "Mirror Pretty", desc: "You looked so pretty here, and I love how natural this moment feels." },
+      { image: "src/june 30, 2024.jpg", placeholder: "june 30, 2024.jpg", date: "June 30, 2024", title: "Passenger Princess", desc: "Seeing you beside me always makes the moment feel softer and sweeter." },
+      { image: "src/july 2, 2024.jpg", placeholder: "july 2, 2024.jpg", date: "July 2, 2024", title: "Every Angle", desc: "You looked beautiful here, even from the most casual angle." },
+      { image: "src/july 5, 2024.jpg", placeholder: "july 5, 2024.jpg", date: "July 5, 2024", title: "That Cute Face", desc: "Your playful expression here is enough to brighten the whole memory." },
+      { image: "src/july 5, 2024..jpg", placeholder: "july 5, 2024..jpg", date: "July 5, 2024", title: "Soft Little Selfie", desc: "You looked lovely here, and this simple selfie still feels special." },
+      { image: "src/july 8, 2024.jpg", placeholder: "july 8, 2024.jpg", date: "July 8, 2024", title: "My Cute Girl", desc: "Your cute little face here makes this photo so easy to adore." },
+      { image: "src/july 12, 2024.jpeg", placeholder: "july 12, 2024.jpeg", date: "July 12, 2024", title: "A Sweet Promise", desc: "This small keepsake reminds me of a feeling I want to keep choosing." },
+      { image: "src/july 14, 2024.jpg", placeholder: "july 14, 2024.jpg", date: "July 14, 2024", title: "Casual Beauty", desc: "You looked so naturally beautiful here, even in an ordinary moment." },
+      { image: "src/july 16, 2024.png", placeholder: "july 16, 2024.png", date: "July 16, 2024", title: "Taking Care", desc: "This moment reminds me that caring for you will always matter to me." },
+      { image: "src/july 22, 2024.jpg", placeholder: "july 22, 2024.jpg", date: "July 22, 2024", title: "Table With You", desc: "Sitting across from you made this simple moment feel sweet and easy." },
+      { image: "src/july 26, 2024.jpg", placeholder: "july 26, 2024.jpg", date: "July 26, 2024", title: "My Safe Place", desc: "Being close to you like this will always feel like home to me, pangga." },
+      { image: "src/july 27, 2024.jpg", placeholder: "july 27, 2024.jpg", date: "July 27, 2024", title: "Resting Beside You", desc: "You looked peaceful here, and I wanted to keep the softness of the moment." },
+      { image: "src/august 2, 2024.jpg", placeholder: "august 2, 2024.jpg", date: "August 2, 2024", title: "Seaside Beauty", desc: "The view was pretty, but this memory feels special because you were there." },
+      { image: "src/august 5, 2024.jpg", placeholder: "august 5, 2024.jpg", date: "August 5, 2024", title: "Golden View", desc: "Even this quiet view reminds me of a beautiful moment shared with you." },
+      { image: "src/august 10, 2024.jpg", placeholder: "august 10, 2024.jpg", date: "August 10, 2024", title: "Under The Trees", desc: "Your playful face here made this outdoor moment feel light and sweet." },
+      { image: "src/august 10, 2024...jpg", placeholder: "august 10, 2024...jpg", date: "August 10, 2024", title: "Made For You", desc: "Your smile with this little surprise made the moment worth remembering." },
+      { image: "src/august 16, 2024.jpg", placeholder: "august 16, 2024.jpg", date: "August 16, 2024", title: "Cute Date Face", desc: "Your cute little look here made this date memory feel even sweeter." },
+      { image: "src/august 16, 2024..jpg", placeholder: "august 16, 2024..jpg", date: "August 16, 2024", title: "Goofy With You", desc: "I love that we can be this playful and comfortable together." },
+      { image: "src/august 21, 2024.jpg", placeholder: "august 21, 2024.jpg", date: "August 21, 2024", title: "Effortlessly Pretty", desc: "You looked so naturally pretty here without even trying." },
+      { image: "src/august 23, 2024.jpg", placeholder: "august 23, 2024.jpg", date: "August 23, 2024", title: "A Soft Memory", desc: "This memory feels special because it still belongs to us." },
+      { image: "src/august 23, 2024..jpg", placeholder: "august 23, 2024..jpg", date: "August 23, 2024", title: "Leaning On You", desc: "This little moment reminds me how comforting it feels to be close to you." },
+      { image: "src/sep 1, 2024.jpg", placeholder: "sep 1, 2024.jpg", date: "September 1, 2024", title: "Golden Smile", desc: "Your smile here is so pretty that it makes the whole photo glow, pangga." },
+      { image: "src/sep 6, 2024.jpg", placeholder: "sep 6, 2024.jpg", date: "September 6, 2024", title: "Good Evening Kiss", desc: "This little selfie with you feels sweet in the simplest way." },
+      { image: "src/sep 12, 2024.jpeg", placeholder: "sep 12, 2024.jpeg", date: "September 12, 2024", title: "Glowing Rose", desc: "This little rose still feels like a soft reminder of you." },
+      { image: "src/sep 21, 2024.jpg", placeholder: "sep 21, 2024.jpg", date: "September 21, 2024", title: "Your Handsome Bf", desc: "Here is your handsome boy, probably missing you again." },
+      { image: "src/sep 28, 2024.png", placeholder: "sep 28, 2024.png", date: "September 28, 2024", title: "Perfect Match", desc: "You looked beautiful beside me, and we looked so right together." },
+      { image: "src/sep 30, 2024.jpg", placeholder: "sep 30, 2024.jpg", date: "September 30, 2024", title: "Mirror Beauty", desc: "You looked so beautiful here, and this mirror photo deserves to stay." },
+      { image: "src/oct 2, 2024.png", placeholder: "oct 2, 2024.png", date: "October 2, 2024", title: "Candid You", desc: "Your quiet presence in this candid moment makes it feel warm and real." },
+      { image: "src/oct 24, 2024.jpg", placeholder: "oct 24, 2024.jpg", date: "October 24, 2024", title: "Casually Stunning", desc: "You looked beautiful in such a simple way, and I love this photo." },
+      { image: "src/oct 26, 2024.jpg", placeholder: "oct 26, 2024.jpg", date: "October 26, 2024", title: "Laughing With You", desc: "Your happiness here made the whole moment feel bright and sweet." },
+      { image: "src/oct 31, 2024.jpg", placeholder: "oct 31, 2024.jpg", date: "October 31, 2024", title: "Beach With You", desc: "You looked beautiful by the beach, and being there with you made it special." },
+      { image: "src/nov 15, 2024.jpg", placeholder: "nov 15, 2024.jpg", date: "November 15, 2024", title: "A Soft Memory", desc: "This memory still matters because it is part of our little story." },
+      { image: "src/nov 25, 2024.jpg", placeholder: "nov 25, 2024.jpg", date: "November 25, 2024", title: "Little Pout", desc: "Your cute pout here makes this photo one I cannot help but love." },
+      { image: "src/nov 26, 2024.png", placeholder: "nov 26, 2024.png", date: "November 26, 2024", title: "A Little Moment", desc: "This simple moment still belongs in our story because it connects back to you." },
+      { image: "src/dec 7, 2024.jpg", placeholder: "dec 7, 2024.jpg", date: "December 7, 2024", title: "Stealing A Kiss", desc: "You looked too cute here, so this little kiss became a favorite memory, pangga." },
+      { image: "src/dec 11, 2024.jpg", placeholder: "dec 11, 2024.jpg", date: "December 11, 2024", title: "Lounging Beauty", desc: "Even while resting, you looked beautiful in the softest way." },
+      { image: "src/dec 15, 2024.jpg", placeholder: "dec 15, 2024.jpg", date: "December 15, 2024", title: "Our Silly Side", desc: "I love how comfortable and playful we can be around each other." },
+      { image: "src/dec 30, 2024.png", placeholder: "dec 30, 2024.png", date: "December 30, 2024", title: "Dancing With You", desc: "You looked beautiful here, and the moment felt happier with you in it." },
+      { image: "src/jan 1, 2025.jpg", placeholder: "jan 1, 2025.jpg", date: "January 1, 2025", title: "Holiday With You", desc: "Sharing a simple holiday moment with you made it feel complete." },
+      { image: "src/jan 3, 2025.jpg", placeholder: "jan 3, 2025.jpg", date: "January 3, 2025", title: "A Sweet Detail", desc: "This little gift reminds me of how thoughtful our memories can be." },
+      { image: "src/jan 4, 2025.jpg", placeholder: "jan 4, 2025.jpg", date: "January 4, 2025", title: "Coffee With You", desc: "Even a simple coffee moment feels sweeter when you are there." },
+      { image: "src/jan 18, 2025.jpg", placeholder: "jan 18, 2025.jpg", date: "January 18, 2025", title: "That Happy Smile", desc: "Your happy little smile here is one of the sweetest things in this photo." },
+      { image: "src/feb 1, 2025.jpg", placeholder: "feb 1, 2025.jpg", date: "February 1, 2025", title: "Weekend With You", desc: "You looked so pretty here, and the night felt better because of you." },
+      { image: "src/feb 14, 2025.png", placeholder: "feb 14, 2025.png", date: "February 14, 2025", title: "My Valentine", desc: "You looked so lovely beside me, and this Valentine memory feels sweet, pangga." },
+      { image: "src/feb 15, 2025.jpg", placeholder: "feb 15, 2025.jpg", date: "February 15, 2025", title: "Quiet Passenger Night", desc: "That dark little passenger-seat memory still feels connected to you." },
+      { image: "src/feb 20, 2025.jpg", placeholder: "feb 20, 2025.jpg", date: "February 20, 2025", title: "Sweet Distraction", desc: "Your smile here made this simple moment feel instantly lighter." },
+      { image: "src/feb 23, 2025.jpeg", placeholder: "feb 23, 2025.jpeg", date: "February 23, 2025", title: "Cool Night", desc: "Being close to you on a night like this made the moment feel soft." },
+      { image: "src/march 15, 2025.jpg", placeholder: "march 15, 2025.jpg", date: "March 15, 2025", title: "Sunset With You", desc: "You made this sunset memory feel sweeter just by being there." },
+      { image: "src/march 31, 2025.jpg", placeholder: "march 31, 2025.jpg", date: "March 31, 2025", title: "Sweet Treat Smile", desc: "Your smile here made this little treat feel like a memory worth keeping." },
+      { image: "src/april 6, 2025.jpg", placeholder: "april 6, 2025.jpg", date: "April 6, 2025", title: "Soft Look", desc: "The way you looked here made this quiet moment feel extra sweet." },
+      { image: "src/april 12, 2025.jpg", placeholder: "april 12, 2025.jpg", date: "April 12, 2025", title: "My Pretty Date", desc: "You looked so beautiful beside me, and I felt lucky to be there with you, pangga." },
+      { image: "src/april 12, 2025..jpg", placeholder: "april 12, 2025..jpg", date: "April 12, 2025", title: "Perfect Pair", desc: "Standing beside you here made this memory feel simple and complete." },
+      { image: "src/april 14, 2025.jpg", placeholder: "april 14, 2025.jpg", date: "April 14, 2025", title: "Proud Beside You", desc: "You looked beautiful here, and I felt proud to share this moment with you." },
+      { image: "src/april 27, 2025.jpg", placeholder: "april 27, 2025.jpg", date: "April 27, 2025", title: "Mirror With You", desc: "This mirror photo feels sweet because it captures us together." },
+      { image: "src/may 7, 2025.jpg", placeholder: "may 7, 2025.jpg", date: "May 7, 2025", title: "Caught In The Moment", desc: "Even from afar, you made this little moment worth remembering." },
+      { image: "src/may 9, 2025.jpg", placeholder: "may 9, 2025.jpg", date: "May 9, 2025", title: "Cuddles With You", desc: "Being close to you like this is still one of my favorite feelings." },
+      { image: "src/may 25, 2025.jpg", placeholder: "may 25, 2025.jpg", date: "May 25, 2025", title: "Sweet And Pretty", desc: "You looked so lovely here, and your presence made the photo softer." },
+      { image: "src/may 27, 2025.jpg", placeholder: "may 27, 2025.jpg", date: "May 27, 2025", title: "Radiant You", desc: "Your smile here is so bright that it makes the whole memory feel happy." },
+      { image: "src/may 31, 2025.jpg", placeholder: "may 31, 2025.jpg", date: "May 31, 2025", title: "Playful Sparkle", desc: "Your playful little face here makes this photo so cute to keep." },
+      { image: "src/june 4, 2025.jpg", placeholder: "june 4, 2025.jpg", date: "June 4, 2025", title: "Us Together", desc: "This simple photo feels special because it has both of us in it." },
+      { image: "src/june 11, 2025.jpg", placeholder: "june 11, 2025.jpg", date: "June 11, 2025", title: "Calm With You", desc: "Your presence here made this simple moment feel calm and warm." },
+      { image: "src/june 12, 2025.HEIC", placeholder: "june 12, 2025.HEIC", date: "June 12, 2025", title: "A Soft Memory", desc: "This memory with you still feels sweet, even if the photo needs support to show." },
+      { image: "src/june 12, 2025..jpg", placeholder: "june 12, 2025..jpg", date: "June 12, 2025", title: "Visor View", desc: "Seeing you in this little mirror moment makes the memory feel cute and real." },
+      { image: "src/june 13, 2025.png", placeholder: "june 13, 2025.png", date: "June 13, 2025", title: "Neon Beauty", desc: "The lights were bright, but your face still made the photo sweeter." },
+      { image: "src/june 13, 2025..jpg", placeholder: "june 13, 2025..jpg", date: "June 13, 2025", title: "Blanket Morning", desc: "A quiet morning close to you is the kind of memory I love keeping." },
+      { image: "src/june 13, 2025....jpg", placeholder: "june 13, 2025....jpg", date: "June 13, 2025", title: "Our Little Sign", desc: "This tiny gesture between us feels sweet because only we know it that way." },
+      { image: "src/june 14, 2025.jpg", placeholder: "june 14, 2025.jpg", date: "June 14, 2025", title: "Staycation Smiles", desc: "You looked so happy here, and that smile made the getaway sweeter." },
+      { image: "src/june 14, 2025...jpg", placeholder: "june 14, 2025...jpg", date: "June 14, 2025", title: "City Lights", desc: "The night was pretty, but being beside you made it feel special." },
+      { image: "src/june 23, 2025.jpg", placeholder: "june 23, 2025.jpg", date: "June 23, 2025", title: "Ferris Wheel Fun", desc: "Being with you made even a playful ride feel like a memory to keep." },
+      { image: "src/june 24, 2025.jpg", placeholder: "june 24, 2025.jpg", date: "June 24, 2025", title: "Backseat Smiles", desc: "You looked so happy here, and the backseat moment became a sweet little memory." },
+      { image: "src/july 3, 2025.jpg", placeholder: "july 3, 2025.jpg", date: "July 3, 2025", title: "Lovably Goofy", desc: "Your funny little expression here is exactly why I adore you." },
+      { image: "src/july 12, 2025.png", placeholder: "july 12, 2025.png", date: "July 12, 2025", title: "One Beautiful Year", desc: "This little anniversary memory feels special because it was ours." },
+      { image: "src/aug 5, 2025.jpg", placeholder: "aug 5, 2025.jpg", date: "August 5, 2025", title: "Can't Resist", desc: "You looked so cute beside me that this kiss became a favorite moment." },
+      { image: "src/aug 15, 2025.jpg", placeholder: "aug 15, 2025.jpg", date: "August 15, 2025", title: "Genuine Smile", desc: "Your smile here feels so real, and it is exactly why I love this photo, pangga." },
+      { image: "src/sept 19, 2025.jpg", placeholder: "sept 19, 2025.jpg", date: "September 19, 2025", title: "Evening Out", desc: "You looked beautiful beside me, and the night felt softer with you there." },
+      { image: "src/oct 2, 2025.jpg", placeholder: "oct 2, 2025.jpg", date: "October 2, 2025", title: "Beachside With You", desc: "Being this close to you made the beach memory feel even softer, pangga." },
+      { image: "src/oct 15. 2025.png", placeholder: "oct 15. 2025.png", date: "October 15, 2025", title: "Happy Together", desc: "Your happy face here makes this simple moment feel full of love." },
+      { image: "src/oct 24, 2025.jpg", placeholder: "oct 24, 2025.jpg", date: "October 24, 2025", title: "Dinner With You", desc: "Even a simple dinner feels special when I get to share it with you." },
+      { image: "src/nov 1, 2025.jpg", placeholder: "nov 1, 2025.jpg", date: "November 1, 2025", title: "Back Hug", desc: "Holding you close like this will always be one of my favorite ways to say I love you." },
+      { image: "src/dec 4, 2025.jpg", placeholder: "dec 4, 2025.jpg", date: "December 4, 2025", title: "Your Handsome Boy", desc: "Here is your handsome boy, probably missing you again." },
+      { image: "src/dec 8, 2025.jpg", placeholder: "dec 8, 2025.jpg", date: "December 8, 2025", title: "Silly With You", desc: "I love how fun and unfiltered we can be when we are together." },
+      { image: "src/dec 11, 2025.jpg", placeholder: "dec 11, 2025.jpg", date: "December 11, 2025", title: "Comfort With You", desc: "Even a quiet night feels warm when you are sitting beside me." },
+      { image: "src/jan 1, 2026.jpg", placeholder: "jan 1, 2026.jpg", date: "January 1, 2026", title: "New Year With You", desc: "Starting the year with you made everything feel sweeter, pangga." },
+      { image: "src/jan 3, 2026.png", placeholder: "jan 3, 2026.png", date: "January 3, 2026", title: "That Smile Again", desc: "Your smile here made this little new-year memory feel bright." },
+      { image: "src/jan 7, 2026.jpg", placeholder: "jan 7, 2026.jpg", date: "January 7, 2026", title: "Simply Mine", desc: "You looked so lovely beside me, and this moment felt quietly special." },
+      { image: "src/jan 17, 2026.jpg", placeholder: "jan 17, 2026.jpg", date: "January 17, 2026", title: "Peaceful Escape", desc: "Being near you here made the relaxation feel calm and sweet." },
+      { image: "src/jan 18, 2026.jpg", placeholder: "jan 18, 2026.jpg", date: "January 18, 2026", title: "Warm Embrace", desc: "Your cute face beside me made this simple photo feel warm." },
+      { image: "src/jan 21, 2026.jpg", placeholder: "jan 21, 2026.jpg", date: "January 21, 2026", title: "Close And Cozy", desc: "You looked so sweet holding those flowers, and this memory feels tender, pangga." },
+      { image: "src/feb 3, 2026.png", placeholder: "feb 3, 2026.png", date: "February 3, 2026", title: "A Simple Moment", desc: "This little moment still feels special because it reminds me of you." },
+      { image: "src/feb 27, 2026.png", placeholder: "feb 27, 2026.png", date: "February 27, 2026", title: "A Little Reminder", desc: "This small photo booth memory is a cute reminder from your boyfriend." },
+      { image: "src/april 9. 2026.jpg", placeholder: "april 9. 2026.jpg", date: "April 9, 2026", title: "Evening With You", desc: "You looked beautiful here, and the night felt better with you in it." },
+      { image: "src/april 27, 2026.jpg", placeholder: "april 27, 2026.jpg", date: "April 27, 2026", title: "Beautiful As Always", desc: "You looked so pretty here, and this photo feels soft because of you." },
+      { image: "src/may 4, 2026.jpg", placeholder: "may 4, 2026.jpg", date: "May 4, 2026", title: "Roadside Jogging", desc: "Even a simple roadside moment feels sweeter when it is connected to you." },
+      { image: "src/may 12, 2026.png", placeholder: "may 12, 2026.png", date: "May 12, 2026", title: "Home Is You", desc: "You looked so sweet beside me, and this memory feels like home." }
+    ];
+
+    const modal      = document.getElementById("memoryModal");
+    const modalPhoto = document.getElementById("modalPhoto");
+    const modalDate  = document.getElementById("modalDate");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc  = document.getElementById("modalDesc");
+
+    function renderMemoryTimeline() {
+      const wall = document.getElementById("memoryWall");
+      if (!wall) return;
+
+      wall.innerHTML = "";
+      const tilts = [-4, 3.2, 4.5, -3, -5, 3.8];
+
+      memories.forEach((m, i) => {
+        const item = document.createElement("div");
+        item.className = "memory-item " + (i % 2 === 0 ? "left" : "right");
+
+        const pin = document.createElement("span");
+        pin.className = "pin";
+
+        const card = document.createElement("article");
+        card.className = "polaroid";
+        card.style.transform = "rotate(" + tilts[i % tilts.length] + "deg)";
+        card.addEventListener("click", () => openMemory(i));
+
+        const tape = document.createElement("span");
+        tape.className = "tape";
+
+        const frame = document.createElement("div");
+        frame.className = "photo-frame";
+        if (m.image) {
+          const img = document.createElement("img");
+          img.src = m.image;
+          img.alt = m.title;
+          if (m.position) img.style.objectPosition = m.position;
+          img.onerror = () => {
+            frame.innerHTML = "";
+            const fallback = document.createElement("span");
+            fallback.textContent = m.placeholder || "Memory photo";
+            frame.appendChild(fallback);
+          };
+          frame.appendChild(img);
+        } else {
+          const placeholder = document.createElement("span");
+          placeholder.textContent = m.placeholder || "Memory photo";
+          frame.appendChild(placeholder);
+        }
+
+        const caption = document.createElement("div");
+        caption.className = "polaroid-caption";
+
+        const date = document.createElement("span");
+        date.textContent = m.date;
+
+        const title = document.createElement("h3");
+        title.textContent = m.title;
+
+        const desc = document.createElement("p");
+        desc.textContent = m.desc;
+
+        caption.append(date, title, desc);
+        card.append(tape, frame, caption);
+        item.append(pin, card);
+        wall.appendChild(item);
+      });
+    }
+
+    function loadPolaroidImages() {
+      renderMemoryTimeline();
+    }
+
+    function openMemory(i) {
+      const m = memories[i];
+      if (!m) return;
+      modalPhoto.innerHTML = "";
+      if (m.image) {
+        const img = document.createElement("img");
+        img.src = m.image; img.alt = m.title;
+        if (m.position) img.style.objectPosition = m.position;
+        img.onerror = () => {
+          modalPhoto.innerHTML = "";
+          modalPhoto.textContent = m.placeholder || "Memory photo";
+        };
+        modalPhoto.appendChild(img);
+      } else {
+        modalPhoto.textContent = m.placeholder;
+      }
+      modalDate.textContent  = m.date;
+      modalTitle.textContent = m.title;
+      modalDesc.textContent  = m.desc;
+      modal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function forceCloseMemory() {
+      modal.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function closeMemory(e) { if (e.target === modal) forceCloseMemory(); }
+
+    /* ─── FLOATING EMOJIS ────────────────────────────── */
+    const emojiPool = [
+      "💗","💖","💕","💓","💞","💝","🌷","🌸","🌺","🌹","🌼","🌻","🌸",
+      "🫶","🩷","✨","🌟","⭐","💫","🦋","🕊️","🫧","🫶🏻","💐","🌈","🍓","🍒","🌙"
+    ];
+
+    function spawnEmoji(size, duration, delay, startX, dx, spin) {
+      const el = document.createElement("div");
+      el.className = "float-emoji";
+      el.textContent = emojiPool[Math.floor(Math.random() * emojiPool.length)];
+      el.style.left = startX + "vw";
+      el.style.fontSize = size + "px";
+      el.style.animationDuration = duration + "s";
+      el.style.animationDelay = -delay + "s";
+      el.style.setProperty("--dx", dx + "px");
+      el.style.setProperty("--spin", spin + "deg");
+      document.body.appendChild(el);
+      return el;
+    }
+
+    function createBackgroundEmojis() {
+      // Continuous ambient emojis
+      for (let i = 0; i < 76; i++) {
+        spawnEmoji(
+          16 + Math.random() * 30,
+          9 + Math.random() * 11,
+          Math.random() * 18,
+          Math.random() * 100,
+          (Math.random() - .5) * 90,
+          (Math.random() - .5) * 540
+        );
+      }
+      // Sparkle dots
+      for (let i = 0; i < 40; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.top  = Math.random() * 100 + "vh";
+        s.style.animationDelay = Math.random() * 3 + "s";
+        document.body.appendChild(s);
+      }
+    }
+
+    function launchHearts() {
+      const burst = ["💖","💕","💗","🌷","✨","🌸","🩷","💝","🌹","💓"];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const el = spawnEmoji(
+            20 + Math.random() * 34,
+            3 + Math.random() * 2.2,
+            0,
+            20 + Math.random() * 60,
+            (Math.random() - .5) * 80,
+            (Math.random() - .5) * 720
+          );
+          el.textContent = burst[Math.floor(Math.random() * burst.length)];
+          setTimeout(() => el.remove(), 6000);
+        }, i * 52);
+      }
+    }
+
+    /* ─── INIT ───────────────────────────────────────── */
+    window.addEventListener("load", () => {
+      createBackgroundEmojis();
+      loadPolaroidImages();
+    });
+
+    window.addEventListener("resize", () => {
+      if (noBtn.style.display === "none") return;
+      const btnW = noBtn.offsetWidth  || 140;
+      const btnH = noBtn.offsetHeight || 56;
+      const pad = 16;
+      const cx = parseFloat(noBtn.style.left) || vw()/2;
+      const cy = parseFloat(noBtn.style.top)  || vh()/2;
+      noBtn.style.left = Math.max(pad, Math.min(cx, vw() - btnW - pad)) + "px";
+      noBtn.style.top  = Math.max(pad, Math.min(cy, vh() - btnH - pad - 28)) + "px";
+    });
+
+    document.addEventListener("keydown", e => { if (e.key === "Escape") forceCloseMemory(); });
+    document.addEventListener("gesturestart", e => e.preventDefault());
+  </script>
+</body>
+</html>
